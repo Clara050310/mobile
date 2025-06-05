@@ -3,6 +3,7 @@ import 'package:sa_petshop/controllers/consulta_controller.dart';
 import 'package:sa_petshop/controllers/pet_controller.dart';
 import 'package:sa_petshop/models/consulta_model.dart';
 import 'package:sa_petshop/models/pet_model.dart';
+import 'package:sa_petshop/view/agenda_consulta_screen.dart';
 
 class DetalhePetScreen extends StatefulWidget{
   final int petId; //receber o PetId -> atributo
@@ -75,12 +76,34 @@ class _DetalhePetScreenState extends State<DetalhePetScreen>{
                 Text("Telefone: ${_pet!.telefoneDono}"),
                 Divider(),
                 Text("Consultas:",style: TextStyle(fontSize: 20),),
-                //operador Ternário par consultas
-                
+                //operador Ternário par consulta
+                _consultas.isEmpty
+                  ? Center(child: Text("Não Existe Agendamentos para o Pet"),)
+                  : Expanded(child: ListView.builder(
+                    itemCount: _consultas.length,
+                    itemBuilder: (context,index){
+                      final consulta = _consultas[index]; //elemento da lista
+                      return Card(
+                        margin: EdgeInsets.symmetric(vertical: 4),
+                        child: ListTile(
+                          title: Text(consulta.tipoServico),
+                          subtitle: Text(consulta.dataHoraFormatada),
+                          trailing: IconButton(
+                            onPressed: ()=>_deleteConsulta(widget.petId), 
+                            icon: Icon(Icons.delete,color: Colors.red,))
+                        ),
+                      );
+                    }))
               ],
             ) 
             ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: ()=> Navigator.push(context, 
+          MaterialPageRoute(builder: (context)=>AgendaConsultaScreen(petId: widget.petId)))),
     );
   }
 
+}
+
+class _deleteConsulta {
 }
